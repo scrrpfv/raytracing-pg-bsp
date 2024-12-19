@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -30,3 +29,18 @@
 *.exe
 *.out
 *.app
+*.ppm
+
+# editor/IDE files
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*.swo
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.user
+
+# CLion files
+cmake-build-*/
