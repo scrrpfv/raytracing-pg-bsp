@@ -2,7 +2,7 @@
 #define POINTHEADER
 #include <iostream>
 #include <cmath>
-#include "Vector.h"
+#include "Vector.cpp"
 
 /*
 Classe de pontos.
