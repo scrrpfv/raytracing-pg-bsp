@@ -12,22 +12,28 @@ class Plane
 {
 public:
     Vector normalVec;
-    point planeP;
+    point P0;
     Vector normColor;
 
-    Plane(Vector normal, point Point, int r, int g, int b){
+    Plane(Vector normal, point planePoint, int r, int g, int b){
         normalVec = normal.normalize();
-        planeP = Point;
+        P0 = planePoint;
         normColor = Vector(r/255, g/255, b/255); 
     }
 
+    /*
+    plane: (I-P0)*normalVec = 0
+    ray: I = from + t*direction
+    equation:   t*(dot(ray.direction, normalVec)) + (ray.from - P0)*normalVec = 0
+                t = ((P0-from).dotProduct(normalVec))/direction.dotProduct(normalVec)
+    */
     double rayIntersect(Ray ray){
         Vector direction = ray.direction;
         point from = ray.from;
 
-        double parameterT = ((planeP-from).dotProduct(normalVec))/direction.dotProduct(normalVec);
+        double t = ((P0-from).dotProduct(normalVec))/direction.dotProduct(normalVec);
 
-        return parameterT;
+        return t;
     }
 };
 
