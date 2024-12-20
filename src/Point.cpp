@@ -1,5 +1,8 @@
 #ifndef POINTHEADER
 #define POINTHEADER
+#include <iostream>
+#include <cmath>
+#include "Vector.cpp"
 
 /*
 Classe de pontos.
@@ -17,7 +20,7 @@ class point{
         double x;
         double y;
         double z;
-public:
+    public:
 
     //Construtores
     point() {}
@@ -29,6 +32,16 @@ public:
     }
 
     //Implemente os métodos de pontos aqui
+
+    Vector operator-(point other)
+    {
+        return Vector(x-other.x, y-other.y, z-other.z);
+    }
+
+    point operator+(Vector vec) 
+    {
+        return point(x+vec.getX(), y+vec.getY(), z+vec.getZ());
+    }
 
     //Print do vetor no formato (x, y, z)
     void print(){
