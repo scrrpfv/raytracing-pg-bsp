@@ -1,11 +1,11 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
-#include "Point.cpp"
-#include "Vector.cpp"
-#include "Ray.cpp"
-#include "Sphere.cpp"
-#include "Plane.cpp"
+#include "Point.hpp"
+#include "Vector.hpp"
+#include "Ray.hpp"
+#include "Sphere.hpp"
+#include "Plane.hpp"
 
 #ifndef CAMERAHEADER
 #define CAMERAHEADER
@@ -13,16 +13,16 @@
 class Camera
 {
 public:
-    point C;
-    point M;
+    Point C;
+    Point M;
     Vector Vup, U, V, W;
-    double d; 
+    double d;
     int vres, hres;
 
-    Camera(point CenterCam, point Aim, Vector Vup, double d, int vres, int hres)
+    Camera(Point CenterCam, Point Aim, Vector Vup, double d, int vres, int hres)
     {
         C = CenterCam;
-        M = M;
+        M = Aim;
         Vup = Vup;
         d = d;
         vres = vres;
@@ -30,7 +30,5 @@ public:
     }
     ~Camera();
 };
-
-
 
 #endif
