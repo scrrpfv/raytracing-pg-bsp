@@ -15,25 +15,27 @@ public:
     point P0;
     Vector normColor;
 
-    Plane(Vector normal, point planePoint, int r, int g, int b){
+    Plane(Vector normal, point planePoint, int rgb[3]){
         normalVec = normal.normalize();
         P0 = planePoint;
-        normColor = Vector(r/255, g/255, b/255); 
+        normColor = Vector(rgb[0], rgb[1], rgb[2]); 
     }
-
+    
+    Vector getNormal(){
+        return normalVec;
+    }
+    
     /*
-    plane: (I-P0)*normalVec = 0
-    ray: I = from + t*direction
-    equation:   t*(dot(ray.direction, normalVec)) + (ray.from - P0)*normalVec = 0
-                t = ((P0-from).dotProduct(normalVec))/direction.dotProduct(normalVec)
+    Recebe e modifica t caso haja interseção com o raio
+    retorna true se houve intersecao e se t>0
     */
     double rayIntersect(Ray ray){
-        Vector direction = ray.direction;
-        point from = ray.from;
+        double aux = ray.direction.dotProduct(normalVec);
+        if (abs(aux) == 0) return -1;
 
-        double t = ((P0-from).dotProduct(normalVec))/direction.dotProduct(normalVec);
-
-        return t;
+        double t = ((P0-ray.from).dotProduct(normalVec))/aux;
+        if (t>0) return t;
+        return -1;
     }
 };
 
