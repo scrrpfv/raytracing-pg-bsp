@@ -1,8 +1,3 @@
-#include <iostream>
-#include <math.h>
-#include "Point.hpp"
-#include "Vector.hpp"
-
 #ifndef RAYHEADER
 #define RAYHEADER
 

@@ -1,9 +1,7 @@
-#ifndef POINTHEADER
-#define POINTHEADER
-#include <iostream>
-#include <cmath>
 #include "Vector.hpp"
 
+#ifndef POINTHEADER
+#define POINTHEADER
 /*
 Classe de pontos.
 
@@ -17,12 +15,11 @@ A classe precisa ser instanciada passando as componentes x, y e z
 
 class Point
 {
-private:
+
+public:
     double x;
     double y;
     double z;
-
-public:
     // Construtores
     Point() {}
     Point(double x, double y, double z)
@@ -44,10 +41,15 @@ public:
         return Point(x + vec.getX(), y + vec.getY(), z + vec.getZ());
     }
 
-    // Print do vetor no formato (x, y, z)
-    void print()
+    Point operator-(Vector vec)
     {
-        std::cout << "(" << x << ", " << y << ", " << z << ")" << std::endl;
+        return Point(x - vec.getX(), y - vec.getY(), z - vec.getZ());
+    }
+
+    // Print do vetor no formato (x, y, z)
+    std::string print()
+    {
+        return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
     }
 
     // Getters
@@ -55,5 +57,11 @@ public:
     double getY() const { return y; }
     double getZ() const { return z; }
 };
+
+inline std::istream &operator>>(std::istream &is, Point &t)
+{
+    is >> t.x >> t.y >> t.z;
+    return is;
+}
 
 #endif
