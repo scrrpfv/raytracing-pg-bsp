@@ -76,5 +76,10 @@ std::tuple<Material *, double> Material::nearest(const Ray &ray)
             hit = &material;
         }
     }
-    return std::make_tuple(hit, intersectT);
+    if (intersectT != INFINITY)
+    {
+        std::cout << "Hit " << intersectT << std::endl;
+        return std::make_tuple(hit, intersectT);
+    }
+    return std::make_tuple(nullptr, INFINITY);
 }

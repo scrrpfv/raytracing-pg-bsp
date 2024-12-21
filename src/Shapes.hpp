@@ -40,8 +40,8 @@ public:
         Vector diffVec = center - ray.from;
 
         double B = -2 * diffVec.dot(ray.direction);
-        double camPosition = diffVec.dot(diffVec) - R * R;
-        double delta = B * B - 4 * camPosition;
+        double C = diffVec.dot(diffVec) - R * R;
+        double delta = B * B - 4 * C;
 
         if (delta < 0)
             return -1;
@@ -49,13 +49,12 @@ public:
         double t0 = (B + sqrt(delta)) / 2;
         double t1 = (B - sqrt(delta)) / 2;
 
-        if (t0 < 0)
-        {
-            if (t1 < 0)
-                return -1;
+        if (t1 > 0)
             return t1;
-        }
-        return t0;
+        if (t0 > 0)
+            return t0;
+
+        return -1;
     }
 };
 

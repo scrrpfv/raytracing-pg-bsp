@@ -30,7 +30,7 @@ int main()
             Point c, m;
             Vector up;
             cin >> hres >> vres >> f >> up >> c >> m >> ttl;
-            camera = new Camera(c, m, up, f, vres, hres);
+            camera = new Camera(c, m, up, vres, hres);
         }
         else if (input == 's')
         {

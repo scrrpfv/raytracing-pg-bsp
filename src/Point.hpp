@@ -64,4 +64,10 @@ inline std::istream &operator>>(std::istream &is, Point &t)
     return is;
 }
 
+inline std::ostream &operator<<(std::ostream &os, const Point &t)
+{
+    os << "(" << t.x << "," << t.y << "," << t.z << ")";
+    return os;
+}
+
 #endif

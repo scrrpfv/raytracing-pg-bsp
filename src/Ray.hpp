@@ -8,9 +8,8 @@ public:
     Point to;
     Vector direction;
 
-    Ray(Point from, Point to)
+    Ray(Point from, Point to) : from(from), to(to)
     {
-        from = from;
         direction = (to - from).normalize();
     }
 
