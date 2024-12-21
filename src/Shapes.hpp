@@ -5,12 +5,17 @@ class Shape
 {
 public:
     // Funções virtuais puras para testar interseção com um raio, aplicar uma matriz de transformação e obter o vetor normal
-    virtual double rayIntersect(const Ray &ray)
+    virtual double rayIntersect(Ray ray)
     {
         return {}; // Implementação default
     }
 
     virtual Vector getNormal(const Point &point)
+    {
+        return {}; // Implementação default retorna vetor nulo
+    }
+
+    virtual Point getPoint()
     {
         return {}; // Implementação default retorna vetor nulo
     }
@@ -24,10 +29,14 @@ class Sphere : public Shape
 public:
     Point center;
     double R;
-    Sphere(Point center, double radius)
+    Sphere(Point center, double radius) : center(center)
     {
-        center = center;
         R = radius;
+    }
+
+    Point getPoint()
+    {
+        return center;
     }
 
     Vector getNormal(Point P)
@@ -37,14 +46,16 @@ public:
 
     double rayIntersect(Ray ray)
     {
-        Vector diffVec = center - ray.from;
+        Vector diffVec = ray.from - center;
 
         double B = -2 * diffVec.dot(ray.direction);
         double C = diffVec.dot(diffVec) - R * R;
-        double delta = B * B - 4 * C;
+        double delta = pow(B, 2) - 4 * C;
 
         if (delta < 0)
             return -1;
+
+        std::cout << "Delta: " << delta << std::endl;
 
         double t0 = (B + sqrt(delta)) / 2;
         double t1 = (B - sqrt(delta)) / 2;
@@ -73,6 +84,11 @@ public:
     {
         normalVec = normal.normalize();
         P0 = planePoint;
+    }
+
+    Point getPoint()
+    {
+        return P0;
     }
 
     Vector getNormal()

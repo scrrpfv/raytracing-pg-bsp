@@ -23,7 +23,7 @@ public:
 
     Vector shade(Point *point, Vector view, Vector *normal);
 
-    static std::tuple<Material *, double> nearest(const Ray &ray);
+    static std::tuple<Material *, double> nearest(Ray ray);
 };
 
 std::vector<Material> objects;
@@ -62,14 +62,16 @@ Vector Material::shade(Point *point, Vector view, Vector *normal)
     return resColor;
 }
 
-std::tuple<Material *, double> Material::nearest(const Ray &ray)
+std::tuple<Material *, double> Material::nearest(Ray ray)
 {
     Material *hit = nullptr;
     double intersectT = INFINITY;
 
     for (Material material : objects)
     {
+        // std::cout << material.getShape()->getPoint() << std::endl;
         double t = material.getShape()->rayIntersect(ray);
+
         if (t > 0 && t < intersectT)
         {
             intersectT = t;
