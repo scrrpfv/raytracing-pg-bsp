@@ -2,7 +2,6 @@
 
 Vector rayCast(Ray ray)
 {
-    // std::cout << ray.to << " , " << ray.direction << std::endl;
     Vector color = ambientLight;
     Material *hit = nullptr;
     double intersectT = INFINITY;
@@ -12,10 +11,6 @@ Vector rayCast(Ray ray)
         Point hitPoint = ray.getPoint(intersectT);
         Vector normal = hit->getShape()->getNormal(hitPoint);
         color = hit->shade(&hitPoint, -1 * ray.direction, &normal);
-
-        // std::cout<<"Normal: "<<normal<<std::endl;
-        // std::cout<<"Hit: " <<hitPoint<<std::endl;
-        // std::cout<<"Cor: "<<color<<std::endl;
     }
     return color;
 }

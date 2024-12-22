@@ -7,11 +7,11 @@ public:
     Shape *shape;
     Vector color;
     double ka, kd, ks;
-    int eta;
+    int cSpecular;
     double ior;
     double kr, kt;
 
-    Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int eta, double ior) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), eta(eta), ior(ior)
+    Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int cSpecular, double ior) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), cSpecular(cSpecular), ior(ior)
     {
     }
 
@@ -41,7 +41,7 @@ Vector Material::shade(Point *point, Vector view, Vector *normal) // 112 128 144
         Material *shadow;
         std::tie(shadow, t) = Material::nearest(Ray(*point, light.position));
 
-        if (shadow == nullptr || lightDirection.dot(light.position - *point) > t)
+        if (shadow == nullptr || lightDirection.norm() > t)
         {
             double dotdiff = lightDirection.dot(*normal);
             if (dotdiff > 0)
@@ -52,7 +52,7 @@ Vector Material::shade(Point *point, Vector view, Vector *normal) // 112 128 144
             double dotspec = r.dot(view);
             if (dotspec > 0)
             {
-                resColor = resColor + light.color * ks * pow(dotspec, eta) * light.intensity;
+                resColor = resColor + light.color * ks * pow(dotspec, cSpecular) * light.intensity;
             }
         }
     }
