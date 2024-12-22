@@ -3,7 +3,7 @@
 Vector rayCast(Ray ray)
 {
     // std::cout << ray.to << " , " << ray.direction << std::endl;
-    Vector color = Vector(255, 255, 255);
+    Vector color = Vector(1, 1, 1);
     Material *hit = nullptr;
     double intersectT = INFINITY;
     std::tie(hit, intersectT) = Material::nearest(ray);
@@ -22,5 +22,5 @@ Vector rayCast(Ray ray)
 
 Vector rayTrace(Ray ray, int ttl)
 {
-    return rayCast(ray);
+    return rayCast(ray) * 255.0;
 }

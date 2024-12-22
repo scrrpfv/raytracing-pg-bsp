@@ -56,8 +56,6 @@ Vector Material::shade(Point *point, Vector view, Vector *normal) // 112 128 144
             }
         }
     }
-    resColor = resColor * 255.0;
-    // std::cout << resColor << std::endl;
     return resColor;
 }
 
