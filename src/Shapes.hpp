@@ -20,6 +20,12 @@ public:
         return {}; // Implementação default retorna vetor nulo
     }
 
+    virtual Vector getNormal(Point &point)
+    {
+        return {}; // Implementação default retorna vetor nulo
+    }
+
+
     virtual Point getPoint()
     {
         return {}; // Implementação default retorna vetor nulo
@@ -44,7 +50,7 @@ public:
         return center;
     }
 
-    Vector getNormal(Point P)
+    Vector getNormal(Point &P)
     {
         return (P - center).normalize();
     }
@@ -55,12 +61,12 @@ public:
 
         double B = -2 * diffVec.dot(ray.direction);
         double C = diffVec.dot(diffVec) - R * R;
-        double delta = pow(B, 2) - 4 * C;
+        double delta = B*B - 4 * C;
 
         if (delta < 0)
             return -1;
 
-        std::cout << "Delta: " << delta << std::endl;
+        //std::cout << "Delta: " << delta << std::endl;
 
         double t0 = (B + sqrt(delta)) / 2;
         double t1 = (B - sqrt(delta)) / 2;

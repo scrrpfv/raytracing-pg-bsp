@@ -2,19 +2,17 @@
 #include "Scene.hpp"
 class Material
 {
+
+public:
     Shape *shape;
     Vector color;
     double ka, kd, ks;
     int eta;
     double ior;
-
-public:
     double kr, kt;
 
-    Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int eta, double ior) : shape(shape), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), eta(eta), ior(ior)
-    {
-        color = color / 255.0;
-    }
+    Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int eta, double ior) : shape(shape), color(color/255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), eta(eta), ior(ior)
+    {}
 
     Shape *getShape() const
     {
@@ -28,34 +26,34 @@ public:
 
 std::vector<Material> objects;
 
-Vector Material::shade(Point *point, Vector view, Vector *normal)
+Vector Material::shade(Point *point, Vector view, Vector *normal) // 112 128 144
 {
     Vector resColor = color.elementWiseMultiplication(ambientLight) * ka;
 
     for (Light light : lights)
     {
-        Vector lightDirection = light.position - *point;
+        Vector lightDirection = (light.position - *point).normalize();
         Vector r = (*normal) * 2.0 * normal->dot(lightDirection) - lightDirection;
 
         double t;
         Material *shadow;
         std::tie(shadow, t) = Material::nearest(Ray(*point, light.position));
 
-        if (shadow == nullptr || lightDirection.norm() > t)
+        if (shadow == nullptr || lightDirection.dot(light.position - *point) < t)
         {
             double dotdiff = lightDirection.dot(*normal);
             if (dotdiff > 0)
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    resColor = color * kd * dotdiff * light.intensity;
-                }
+                //for (int i = 0; i < 3; i++)
+                //{
+                    resColor = resColor + color * kd * dotdiff * light.intensity;
+                //}
             }
 
             double dotspec = r.dot(view);
             if (dotspec > 0)
             {
-                resColor = resColor * ks * pow(dotspec, eta) * light.intensity;
+                resColor = resColor + ks * pow(dotspec, eta) * light.color * light.intensity;
             }
         }
     }
@@ -69,10 +67,7 @@ std::tuple<Material *, double> Material::nearest(Ray ray)
 
     for (Material &material : objects)
     {   
-        //std::cout<<"Ray: "<<ray.to<<" "<<ray.direction<<std::endl;
-        //std::cout << material.getShape()->getPoint() << std::endl;
         double t = material.getShape()->rayIntersect(ray);
-        //std::cout << "T: " << t << std::endl;
 
         if (t > 0 && t < intersectT)
         {
@@ -82,7 +77,6 @@ std::tuple<Material *, double> Material::nearest(Ray ray)
     }
     if (intersectT != INFINITY)
     {
-        std::cout << "Hit " << intersectT << std::endl;
         return std::make_tuple(hit, intersectT);
     }
     return std::make_tuple(nullptr, INFINITY);

@@ -14,6 +14,6 @@ struct Light
     }
 };
 
-Vector ambientLight = Vector(0.1, 0.1, 0.1);
+Vector ambientLight = Vector(255, 255, 255);
 std::vector<Light> lights;
 #endif

@@ -33,7 +33,7 @@ public:
     void render(double f, int ttl)
     {
         std::ofstream ppm;
-        ppm.open("render.txt");
+        ppm.open("render.ppm");
         std::cout << "Rendering at cam " << camPosition << " and AIM " << target << std::endl;
         std::cout << "Rendering..." << std::endl;
 
