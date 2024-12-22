@@ -67,10 +67,12 @@ std::tuple<Material *, double> Material::nearest(Ray ray)
     Material *hit = nullptr;
     double intersectT = INFINITY;
 
-    for (Material material : objects)
-    {
-        // std::cout << material.getShape()->getPoint() << std::endl;
+    for (Material &material : objects)
+    {   
+        //std::cout<<"Ray: "<<ray.to<<" "<<ray.direction<<std::endl;
+        //std::cout << material.getShape()->getPoint() << std::endl;
         double t = material.getShape()->rayIntersect(ray);
+        //std::cout << "T: " << t << std::endl;
 
         if (t > 0 && t < intersectT)
         {

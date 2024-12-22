@@ -4,8 +4,13 @@
 class Shape
 {
 public:
-    // Funções virtuais puras para testar interseção com um raio, aplicar uma matriz de transformação e obter o vetor normal
-    virtual double rayIntersect(Ray ray)
+    // Funções virtuais puras para testar interseção com um raio e obter o vetor normal
+    virtual double rayIntersect(const Ray &ray)
+    {
+        return {}; // Implementação default
+    }
+
+    virtual double rayIntersect(Ray &ray)
     {
         return {}; // Implementação default
     }
@@ -44,7 +49,7 @@ public:
         return (P - center).normalize();
     }
 
-    double rayIntersect(Ray ray)
+    double rayIntersect(Ray &ray)
     {
         Vector diffVec = ray.from - center;
 
@@ -86,21 +91,12 @@ public:
         P0 = planePoint;
     }
 
-    Point getPoint()
-    {
-        return P0;
-    }
-
-    Vector getNormal()
+    Vector getNormal(Point &point)
     {
         return normalVec;
     }
 
-    /*
-    Recebe e modifica t caso haja interseção com o raio
-    retorna true se houve intersecao e se t>0
-    */
-    double rayIntersect(Ray ray)
+    double rayIntersect(Ray &ray)
     {
         double aux = ray.direction.dot(normalVec);
         if (abs(aux) == 0)

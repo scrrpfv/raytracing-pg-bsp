@@ -4,10 +4,13 @@
 #ifndef CAMERAHEADER
 #define CAMERAHEADER
 
-const double squareSide = 0.1;
-
 class Camera
 {
+private:
+    double pixelSide;
+    Vector unitUp;
+    Vector unitLeft;
+
 public:
     Point camPosition;
     Point target;
@@ -21,16 +24,26 @@ public:
         target = Aim;
         W = (target - camPosition).normalize();
         U = (Vup.cross(W)).normalize(); // aponta para esquerda
-        V = W.cross(U);                 // aponta para cima
+        V = W.cross(U);   // aponta para cima
+        pixelSide = 1.0/hres;
+        unitUp = V * pixelSide;
+        unitLeft = U * pixelSide;
     }
 
     void render(double f, int ttl)
     {
         std::ofstream ppm;
         ppm.open("render.txt");
-        Point topleftPixel = camPosition + W * f + (V * (vres - 1) + (U * (hres - 1))) * squareSide / 2.0;
+        std::cout << "Rendering at cam " << camPosition << " and AIM " << target << std::endl;
+        std::cout << "Rendering..." << std::endl;
+
+        Point topleftPixel = camPosition + W * f + (V * (vres - 1) + U * (hres - 1)) * pixelSide / 2.0;
 
         std::cout << "Top left pixel: " << topleftPixel << std::endl;
+        std::cout << "Pixel side: " << pixelSide << std::endl;
+        std::cout << "Unit up: " << unitUp << std::endl;
+        std::cout << "Unit left: " << unitLeft << std::endl;
+        std::cout << "W: " << W << std::endl;
         ppm << "P3" << std::endl;
         ppm << hres << ' ' << vres << std::endl;
         ppm << 255 << std::endl;
@@ -39,7 +52,7 @@ public:
         {
             for (int j = 0; j < hres; j++)
             {
-                Point pixelPosition = topleftPixel - ((U * j - V * i) * -1 * squareSide);
+                Point pixelPosition = topleftPixel - unitUp * i - unitLeft * j;
                 Vector pixelColor = rayTrace(Ray(camPosition, pixelPosition), ttl);
                 ppm << pixelColor << std::endl;
             }

@@ -44,12 +44,12 @@ int main()
         }
         else if (input == 'p')
         {
-            Vector p0, o;
-            Point n;
+            Vector n, o;
+            Point p0;
             double kd, ks, ka, kr, kt, ior;
             int eta;
             cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> eta >> ior;
-            objects.emplace_back(new Plane(p0, n), o, ka, kd, ks, kr, kt, eta, ior);
+            objects.emplace_back(new Plane(n, p0), o, ka, kd, ks, kr, kt, eta, ior);
         }
         else if (input == 'l')
         {
