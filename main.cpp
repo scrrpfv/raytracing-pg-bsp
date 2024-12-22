@@ -65,7 +65,7 @@ int main()
         else if (input == 'a')
         {
             cin >> ambientLight;
-            //ambientLight = ambientLight * (1 / 255.0);
+            ambientLight = ambientLight * (1 / 255.0);
         }
         else if (input == 'e')
         {
