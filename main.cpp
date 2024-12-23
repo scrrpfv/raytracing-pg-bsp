@@ -39,8 +39,8 @@ int main()
             double radius;
             double kd, ks, ka, kr, kt, ior;
             int cSpecular;
-            cin >> center >> radius >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
-            objects.emplace_back(new Sphere(center, radius), o, ka, kd, ks, kr, kt, cSpecular, ior);
+            cin >> center >> radius >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular;
+            objects.emplace_back(new Sphere(center, radius), o, ka, kd, ks, kr, kt, cSpecular);
         }
         else if (input == 'p')
         {
@@ -48,8 +48,8 @@ int main()
             Point p0;
             double kd, ks, ka, kr, kt, ior;
             int cSpecular;
-            cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
-            objects.emplace_back(new Plane(n, p0), o, ka, kd, ks, kr, kt, cSpecular, ior);
+            cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular;
+            objects.emplace_back(new Plane(n, p0), o, ka, kd, ks, kr, kt, cSpecular);
         }
         else if (input == 'l')
         {

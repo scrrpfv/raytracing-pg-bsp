@@ -11,7 +11,7 @@ public:
     double ior;
     double kr, kt;
 
-    Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int cSpecular, double ior) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), cSpecular(cSpecular), ior(ior)
+    Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int cSpecular) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), cSpecular(cSpecular)
     {
     }
 
