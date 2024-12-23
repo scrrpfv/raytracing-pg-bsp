@@ -1,6 +1,8 @@
 #include "Point.hpp"
 #include "Ray.hpp"
 
+const float EPS = 1e-6f;
+
 class Shape
 {
 public:
@@ -63,7 +65,7 @@ public:
         double C = diffVec.dot(diffVec) - R * R;
         double delta = B * B - 4 * C;
 
-        if (delta < 0)
+        if (delta < EPS)
             return -1;
 
         // std::cout << "Delta: " << delta << std::endl;
@@ -100,7 +102,7 @@ public:
     Vector getNormal(Ray &ray, const double t)
     {
         Vector align = ray.from - P0;
-        if (normalVec.dot(align) > 0)
+        if (normalVec.dot(align) > EPS)
             return normalVec;
         return normalVec * -1;
     }
@@ -108,11 +110,11 @@ public:
     double rayIntersect(Ray &ray)
     {
         double aux = ray.direction.dot(normalVec);
-        if (abs(aux) == 0)
+        if (abs(aux) < EPS)
             return -1;
 
         double t = ((P0 - ray.from).dot(normalVec)) / aux;
-        if (t > 0)
+        if (t > EPS)
             return t;
         return -1;
     }
