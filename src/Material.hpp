@@ -8,7 +8,6 @@ public:
     Vector color;
     double ka, kd, ks;
     int cSpecular;
-    double ior;
     double kr, kt;
 
     Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int cSpecular) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), cSpecular(cSpecular)
