@@ -98,9 +98,6 @@ public:
 
     Vector getNormal(Point &point)
     {
-        Vector diffVec = point - P0;
-        if (diffVec.dot(normalVec) > 0)
-            return normalVec;
         return normalVec * -1;
     }
 
