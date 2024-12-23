@@ -48,13 +48,13 @@ Vector Material::shade(Point *point, Vector view, Vector *normal) // 112 128 144
         if (shadow == nullptr || lightDirection.dot(light.position - *point) < t)
         {
             double dotdiff = lightDirection.dot(*normal);
-            if (dotdiff > EPS)
+            if (dotdiff > almostZero)
             {
                 resColor = resColor + color.elementWiseMultiplication(light.color) * kd * dotdiff * light.intensity;
             }
 
             double dotspec = r.dot(view);
-            if (dotspec > EPS)
+            if (dotspec > almostZero)
             {
                 resColor = resColor + light.color * ks * pow(dotspec, cSpecular) * light.intensity;
             }
@@ -72,7 +72,7 @@ std::tuple<Material *, double> Material::nearest(Ray ray)
     {
         double t = material.getShape()->rayIntersect(ray);
 
-        if (t > EPS && t < intersectT)
+        if (t > almostZero && t < intersectT)
         {
             intersectT = t;
             hit = &material;
