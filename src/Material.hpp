@@ -19,6 +19,11 @@ public:
         return shape;
     }
 
+    Vector getColor() const
+    {
+        return color;
+    }
+
     Vector shade(Point *point, Vector view, Vector *normal);
 
     static std::tuple<Material *, double> nearest(Ray ray);
@@ -38,23 +43,23 @@ Vector Material::shade(Point *point, Vector view, Vector *normal) // 112 128 144
 
         double t;
         Material *shadow;
-        std::tie(shadow, t) = Material::nearest(Ray(*point, light.position));
+        // std::tie(shadow, t) = Material::nearest(Ray(*point, light.position));
 
-        if (shadow == nullptr || lightDirection.norm() > t)
+        // if (shadow == nullptr || lightDirection.norm() > t)
+        // {
+        double dotdiff = lightDirection.dot(*normal);
+        if (dotdiff > 0)
         {
-            double dotdiff = lightDirection.dot(*normal);
-            if (dotdiff > 0)
-            {
-                resColor = resColor + color.elementWiseMultiplication(light.color) * kd * dotdiff * light.intensity;
-            }
+            resColor = resColor + color.elementWiseMultiplication(light.color) * kd * dotdiff * light.intensity;
+        }
 
-            double dotspec = r.dot(view);
-            if (dotspec > 0)
-            {
-                resColor = resColor + light.color * ks * pow(dotspec, cSpecular) * light.intensity;
-            }
+        double dotspec = r.dot(view);
+        if (dotspec > 0)
+        {
+            resColor = resColor + light.color * ks * pow(dotspec, cSpecular) * light.intensity;
         }
     }
+    // }
     return resColor;
 }
 
@@ -77,5 +82,5 @@ std::tuple<Material *, double> Material::nearest(Ray ray)
     {
         return std::make_tuple(hit, intersectT);
     }
-    return std::make_tuple(nullptr, INFINITY);
+    return std::make_tuple(hit, INFINITY);
 }

@@ -36,7 +36,7 @@ public:
         ppm.open("render.ppm");
         std::cout << "Rendering..." << std::endl;
 
-        Point topleftPixel = camPosition + W * f + (V * (vres - 1) + U * (hres - 1)) * pixelSide / 2.0;
+        Point topleftPixel = camPosition + W * (f / 2) + (V * (vres - 1) + U * (hres - 1)) * pixelSide / 2.0;
         ppm << "P3" << std::endl;
         ppm << hres << ' ' << vres << std::endl;
         ppm << 255 << std::endl;
