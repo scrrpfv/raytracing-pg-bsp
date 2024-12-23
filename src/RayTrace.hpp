@@ -9,7 +9,7 @@ Vector rayCast(Ray ray)
     if (hit)
     {
         Point hitPoint = ray.getPoint(intersectT);
-        Vector normal = hit->getShape()->getNormal(hitPoint);
+        Vector normal = hit->getShape()->getNormal(ray, intersectT);
         color = hit->shade(&hitPoint, -1 * ray.direction, &normal);
     }
     return color;

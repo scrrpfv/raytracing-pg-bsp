@@ -15,7 +15,7 @@ public:
         return {}; // Implementação default
     }
 
-    virtual Vector getNormal(const Point &point)
+    virtual Vector getNormal(Ray &ray, const double t)
     {
         return {}; // Implementação default retorna vetor nulo
     }
@@ -49,8 +49,9 @@ public:
         return center;
     }
 
-    Vector getNormal(Point &P)
+    Vector getNormal(Ray &ray, const double t)
     {
+        Point P = ray.getPoint(t);
         return (P - center).normalize();
     }
 
@@ -96,10 +97,10 @@ public:
         P0 = planePoint;
     }
 
-    Vector getNormal(Point &point)
+    Vector getNormal(Ray &ray, const double t)
     {
-        Vector diffVec = point - P0;
-        if (diffVec.dot(normalVec) > 0)
+        Vector align = ray.from - P0;
+        if (normalVec.dot(align) > 0)
             return normalVec;
         return normalVec * -1;
     }
