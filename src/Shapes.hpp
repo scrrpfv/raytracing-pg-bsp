@@ -25,7 +25,6 @@ public:
         return {}; // Implementação default retorna vetor nulo
     }
 
-
     virtual Point getPoint()
     {
         return {}; // Implementação default retorna vetor nulo
@@ -61,12 +60,12 @@ public:
 
         double B = -2 * diffVec.dot(ray.direction);
         double C = diffVec.dot(diffVec) - R * R;
-        double delta = B*B - 4 * C;
+        double delta = B * B - 4 * C;
 
         if (delta < 0)
             return -1;
 
-        //std::cout << "Delta: " << delta << std::endl;
+        // std::cout << "Delta: " << delta << std::endl;
 
         double t0 = (B + sqrt(delta)) / 2;
         double t1 = (B - sqrt(delta)) / 2;
@@ -99,7 +98,10 @@ public:
 
     Vector getNormal(Point &point)
     {
-        return normalVec;
+        Vector diffVec = point - P0;
+        if (diffVec.dot(normalVec) > 0)
+            return normalVec;
+        return normalVec * -1;
     }
 
     double rayIntersect(Ray &ray)
