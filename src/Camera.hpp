@@ -46,7 +46,7 @@ public:
             for (int j = 0; j < hres; j++)
             {
                 Point pixelPosition = topleftPixel - unitUp * i - unitLeft * j;
-                Vector pixelColor = rayTrace(Ray(camPosition, pixelPosition), ttl);
+                Vector pixelColor = rayTrace(Ray(camPosition, pixelPosition), ttl) * 255.0;
                 ppm << pixelColor << std::endl;
             }
         }
