@@ -29,9 +29,7 @@ RayCastResult rayCast(Ray ray)
 Vector rayTrace(Ray ray, int ttl)
 {
     RayCastResult cast = rayCast(ray);
-    if (cast.hit == nullptr)
-        return Vector(1, 1, 1);
-    if (ttl != 0)
+    if (cast.hit && ttl != 0)
     {
         if (cast.hit->kr > almostZero)
         {
