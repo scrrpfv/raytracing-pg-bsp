@@ -61,7 +61,10 @@ public:
     Vector getNormal(Ray &ray, const double t)
     {
         Point P = ray.getPoint(t);
-        return (P - center).normalize();
+        Vector normalVec = (P - center).normalize();
+        if ((ray.from - center).norm() < R)
+            return normalVec;
+        return normalVec * -1;
     }
 
     double rayIntersect(Ray &ray)
