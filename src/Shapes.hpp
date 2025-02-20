@@ -1,5 +1,6 @@
 #include "Point.hpp"
 #include "Ray.hpp"
+#include "Transform.hpp"
 
 const float almostZero = 1e-8f;
 
@@ -31,6 +32,12 @@ public:
     {
         return {}; // Implementação default retorna vetor nulo
     }
+
+    // TODO implementar para cada forma
+    virtual void applyTransform(Matrix &transformMatrix){
+        return;
+    }
+
 };
 
 #ifndef SPHEREHEADER
@@ -118,6 +125,17 @@ public:
             return t;
         return -1;
     }
+};
+
+#endif
+
+
+#ifndef TRIANGLEHEADER
+#define TRIANGLEHEADER
+//TODO implementar triangulo com intersect, applyTransform, getNormal
+
+class Triangle : Shape {
+    
 };
 
 #endif
