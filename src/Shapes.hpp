@@ -34,10 +34,10 @@ public:
     }
 
     // TODO implementar para cada forma
-    virtual void applyTransform(Matrix &transformMatrix){
+    virtual void applyTransform(Matrix &transformMatrix)
+    {
         return;
     }
-
 };
 
 #ifndef SPHEREHEADER
@@ -132,13 +132,12 @@ public:
 
 #endif
 
-
 #ifndef TRIANGLEHEADER
 #define TRIANGLEHEADER
-//TODO implementar triangulo com intersect, applyTransform, getNormal
+// TODO implementar triangulo com intersect, applyTransform, getNormal
 
-class Triangle : Shape {
-    
+class Triangle : public Shape
+{
 };
 
 #endif

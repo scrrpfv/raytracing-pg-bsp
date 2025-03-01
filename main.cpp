@@ -56,7 +56,7 @@ int main()
             string filename;
             cin >> filename;
             ObjReader objReader = ObjReader(filename);
-            objects.emplace_back(objReader);
+            objReader.attachMaterials(objects);
         }
         else if (input == 'l')
         {
