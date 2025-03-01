@@ -3,7 +3,7 @@
 #include <vector>
 #include <math.h>
 #include <cmath>
-// #include "src/ObjReader.cpp"
+#include "src/ShapeObjReader.hpp"
 #include "src/Shapes.hpp"
 #include "src/Material.hpp"
 #include "src/Camera.hpp"
@@ -50,6 +50,13 @@ int main()
             int cSpecular;
             cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
             objects.emplace_back(new Plane(n, p0), o, ka, kd, ks, kr, kt, cSpecular, ior);
+        }
+        else if (input == 'o')
+        {
+            string filename;
+            cin >> filename;
+            ObjReader objReader = ObjReader(filename);
+            objects.emplace_back(objReader);
         }
         else if (input == 'l')
         {
