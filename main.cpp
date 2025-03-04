@@ -3,13 +3,14 @@
 #include <vector>
 #include <math.h>
 #include <cmath>
-#include "src/ShapeObjReader.hpp"
 #include "src/Shapes.hpp"
+#include "src/Scene.hpp"
 #include "src/Material.hpp"
 #include "src/Camera.hpp"
 #include "src/Point.hpp"
 #include "src/Ray.hpp"
 #include "src/Vector.hpp"
+#include "src/MaterialObjReader.hpp"
 
 using namespace std;
 
@@ -40,7 +41,7 @@ int main()
             double kd, ks, ka, kr, kt, ior;
             int cSpecular;
             cin >> center >> radius >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
-            objects.emplace_back(new Sphere(center, radius), o, ka, kd, ks, kr, kt, cSpecular, ior);
+            objects.emplace_back(new Sphere(center, radius), o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, cSpecular, ior);
         }
         else if (input == 'p')
         {
@@ -49,12 +50,13 @@ int main()
             double kd, ks, ka, kr, kt, ior;
             int cSpecular;
             cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
-            objects.emplace_back(new Plane(n, p0), o, ka, kd, ks, kr, kt, cSpecular, ior);
+            objects.emplace_back(new Plane(n, p0), o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, cSpecular, ior);
         }
         else if (input == 'o')
         {
-            string filename;
-            cin >> filename;
+            string filename, rest;
+            cin >> filename >> rest;
+
             ObjReader objReader = ObjReader(filename);
             objReader.attachMaterials(objects);
         }

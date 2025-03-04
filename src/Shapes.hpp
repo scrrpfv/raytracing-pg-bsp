@@ -83,10 +83,10 @@ public:
         double t0 = (B + sqrt(delta)) / 2;
         double t1 = (B - sqrt(delta)) / 2;
 
-        //TODO verificar se era pra usar almost zero
-        if (t1 > 0)
+        // TODO verificar se era pra usar almost zero
+        if (t1 > almostZero)
             return t1;
-        if (t0 > 0)
+        if (t0 > almostZero)
             return t0;
 
         return -1;
@@ -155,14 +155,15 @@ public:
     }
 
     double rayIntersect(Ray &ray)
-    {   
+    {
+
         Plane triangPlane = Plane(normalVec, p0);
         double t = triangPlane.rayIntersect(ray);
-        
-        if (t < almostZero) return -1;
+
+        if (t < almostZero)
+            return -1;
 
         Point P = ray.getPoint(t);
-            
         Vector edge0 = p1 - p0;
         Vector edge1 = p2 - p0;
         Vector C = P - p0;
@@ -175,20 +176,18 @@ public:
 
         double denom = dot00 * dot11 - dot01 * dot01;
 
-        if(denom == 0) return -1; 
-        
+        if (denom == 0)
+            return -1;
+
         double beta = (dotC0 * dot11 - dotC1 * dot01) / denom;
         double gamma = (dotC1 * dot00 - dotC0 * dot01) / denom;
         double alpha = 1.0 - beta - gamma;
-        
-        if (alpha > 1 || beta > 1 || gamma > 1) return -1;
+
+        if (alpha < almostZero || beta < almostZero || gamma < almostZero)
+            return -1;
 
         return t;
-
     }
-
-
-
 };
 
 #endif

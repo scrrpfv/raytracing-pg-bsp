@@ -1,16 +1,16 @@
 #include <tuple>
-#include "Scene.hpp"
+
 class Material
 {
 
 public:
     Shape *shape;
     Vector color;
-    double ka, kd, ks;
+    Vector ka, kd, ks, kr;
     int cSpecular;
-    double kr, kt, ior;
+    double kt, ior;
 
-    Material(Shape *shape, Vector color, double ka, double kd, double ks, double kr, double kt, int cSpecular, double ior) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), cSpecular(cSpecular), ior(ior)
+    Material(Shape *shape, Vector color, Vector ka, Vector kd, Vector ks, Vector kr, double kt, int cSpecular, double ior) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), cSpecular(cSpecular), ior(ior)
     {
     }
 
@@ -31,9 +31,9 @@ public:
 
 std::vector<Material> objects;
 
-Vector Material::shade(Point *point, Vector view, Vector *normal) 
+Vector Material::shade(Point *point, Vector view, Vector *normal)
 {
-    Vector resColor = color.elementWiseMultiplication(ambientLight * ka);
+    Vector resColor = color.elementWiseMultiplication(ambientLight.elementWiseMultiplication(ka));
 
     for (Light light : lights)
     {
@@ -50,13 +50,13 @@ Vector Material::shade(Point *point, Vector view, Vector *normal)
             double dotdiff = lightDirection.dot(*normal);
             if (dotdiff > almostZero)
             {
-                resColor = resColor + color.elementWiseMultiplication(light.color) * kd * dotdiff * light.intensity;
+                resColor = resColor + color.elementWiseMultiplication(light.color).elementWiseMultiplication(kd) * dotdiff * light.intensity;
             }
 
             double dotspec = r.dot(view);
             if (dotspec > almostZero)
             {
-                resColor = resColor + light.color * ks * pow(dotspec, cSpecular) * light.intensity;
+                resColor = resColor + light.color.elementWiseMultiplication(ks) * pow(dotspec, cSpecular) * light.intensity;
             }
         }
     }

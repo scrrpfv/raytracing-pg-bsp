@@ -28,10 +28,7 @@ Caso sintam necessidade, podem editar a classe para obter mais informações.
 #include <vector>
 #include <string>
 #include <sstream>
-#include "Vector.hpp"
-#include "Point.hpp"
 #include "Colormap.hpp"
-#include "Shapes.hpp"
 
 struct Face
 {
@@ -62,7 +59,7 @@ struct Face
     }
 };
 
-class objReader
+class ObjReader
 {
 
 private:
@@ -75,7 +72,7 @@ private:
     colormap cmap;                              // Objeto de leitura de arquivos .mtl
 
 public:
-    objReader(std::string filename) : cmap(cmap)
+    ObjReader(std::string filename)
     {
 
         // Abre o arquivo
@@ -236,21 +233,19 @@ public:
         }
     }
 
-    void attachMaterials(std::vector<Material> &objects, Vector color)
+    void attachMaterials(std::vector<Material> &objects)
     {
         for (const auto &face : faces)
         {
             objects.emplace_back(new Triangle(
-                vertices[face.verticeIndice[0]], 
-                vertices[face.verticeIndice[1]], 
-                vertices[face.verticeIndice[2]],  
-                normals[face.normalIndice[0]]), 
-                color,
-                face.ka, face.kd, face.ks, face.ke, face.d, face.ns, face.ni
-            );
-        } 
+                                     vertices[face.verticeIndice[0]],
+                                     vertices[face.verticeIndice[1]],
+                                     vertices[face.verticeIndice[2]],
+                                     normals[face.normalIndice[0]]),
+                                 face.kd * 255,
+                                 face.ka, face.kd, face.ks, face.ke, face.d, face.ns, face.ni);
+        }
     }
 };
-
 
 #endif

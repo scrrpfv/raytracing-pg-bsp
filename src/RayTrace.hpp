@@ -31,10 +31,10 @@ Vector rayTrace(Ray ray, int ttl)
     RayCastResult cast = rayCast(ray);
     if (cast.hit && ttl != 0)
     {
-        if (cast.hit->kr > almostZero)
+        if (cast.hit->kr.getX() > almostZero && cast.hit->kr.getY() > almostZero && cast.hit->kr.getZ() > almostZero)
         {
             Vector reflectedColor = rayTrace(cast.reflectedRay, ttl - 1);
-            return cast.color + reflectedColor * cast.hit->kr;
+            return cast.color + reflectedColor.elementWiseMultiplication(cast.hit->kr);
         }
         if (cast.hit->kt > almostZero)
         {
