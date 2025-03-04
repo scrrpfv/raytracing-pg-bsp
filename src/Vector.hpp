@@ -1,3 +1,5 @@
+#include <cmath>
+
 #ifndef VECTORHEADER
 #define VECTORHEADER
 /*

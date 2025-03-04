@@ -1,4 +1,5 @@
 #include "Vector.hpp"
+#include "Point.hpp"
 #include <vector>
 #include <cmath>
 
@@ -8,28 +9,41 @@
 #define PI 3.141592
 
 //TODO verificar se é preciso garantir que cos e sin sejam maiores que almostZero
-// Classe de matrizes com transformacoes afim
+
+// Classe de matrizes 4x4 com transformacoes afim
 class Matrix {
     private:
+    std::vector<std::vector<double>> data;
+
+    public:
         int rows;
         int cols;
-        std::vector<std::vector<double>> data;
-    
-    public:
-    
-        // valores das células da matriz inicia como zero por padrão
-        Matrix(int rows, int cols, double initVal = 0.0) : rows(rows), cols(cols) {
-            data.resize(rows, std::vector<double>(cols, initVal));
+
+        // inicia como uma matriz identidate 4x4
+        Matrix() : rows(4), cols(4) {
+            data.resize(4, std::vector<double>(4, 0));
+            for (int i = 0; i<4; i++){
+                data[i][i] = 1;
+            }
         }
 
-        // valores inciados a partir de um outro vetor de vetores
+        // inicia como uma matriz nula ou identidade nxn
+        Matrix(int rows, int cols, bool identity = true, double initVal = 0.0) : rows(rows), cols(cols) {
+            data.resize(rows, std::vector<double>(cols, initVal));
+            if (identity) {   
+                for (int i = 0; i<rows; i++){
+                    data[i][i] = 1;
+                } 
+            }
+        }
+
+        // matriz inciada a partir de um vetor de vetores
         Matrix(const std::vector<std::vector<double>> &data) : data(data){};
     
         double& operator()(int row, int col) {
             return data[row][col];
         }
 
-    
         // aplica matriz no vetor
         Vector operator*(const Vector& v) const {
             double x = data[0][0] * v.x + data[0][1] * v.y + data[0][2] * v.z + data[0][3];
@@ -50,10 +64,10 @@ class Matrix {
 
         // multiplica duas matrizes (utilizar para composicao de operadores)
         const Matrix operator*(Matrix& M) {
-            Matrix result = Matrix(rows, M.cols);
+            Matrix result = Matrix(rows, M.cols, false);
             for (int i = 0; i < rows; i++){
-                for (int k = 0; k < cols; k++){
-                    for (int j = 0; j < M.cols; j++){
+                for (int j = 0; j < M.cols; j++){
+                    for (int k = 0; k < cols; k++){
                         result(i, j)+=data[i][k]*M(k, j);
                     }
                 }
@@ -61,8 +75,19 @@ class Matrix {
             return result;
         }
 
+        // soma de matrizes
+        const Matrix operator+(Matrix& M) {
+            Matrix result = Matrix(rows, cols);
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    result(i, j) = data[i][j] + M.data[i][j];
+                }
+            }
+            return result;
+        }
+
         // retorna um operador de translacao
-        static Matrix translate(double tx, double ty, double tz) {
+        static Matrix translation(double tx, double ty, double tz) {
             Matrix M(4, 4);
             M(0, 0) = 1; 
             M(1, 1) = 1; 
@@ -105,7 +130,7 @@ class Matrix {
         }
 
         // retorna um operador de rotação em torno do eixo x. Recebe angulo em graus
-        static Matrix rotateX(double angle, bool clockwise = false) {
+        static Matrix rotationX(double angle, bool clockwise = false) {
             Matrix M(4, 4);
             angle = angle * PI / 180; 
             M(0, 0) = 1;
@@ -118,7 +143,7 @@ class Matrix {
         }
     
         // retorna um operador de rotação em torno do eixo y. Recebe angulo em graus
-        static Matrix rotateY(double angle, bool clockwise = false) {
+        static Matrix rotationY(double angle, bool clockwise = false) {
             Matrix M(4, 4);
             angle = angle * PI / 180; 
             M(0, 0) = cos(angle);
@@ -131,7 +156,7 @@ class Matrix {
         }
     
         // retorna um operador de rotação em torno do eixo z. Recebe angulo em graus
-        static Matrix rotateZ(double angle, bool clockwise = false) {
+        static Matrix rotationZ(double angle, bool clockwise = false) {
             Matrix M(4, 4);
             angle = angle * PI / 180;
             M(0, 0) = cos(angle);
@@ -144,7 +169,7 @@ class Matrix {
         }
 
         // retorna um operador de escala
-        static Matrix scale(double sx, double sy, double sz) {
+        static Matrix scaleOp(double sx, double sy, double sz) {
             Matrix M(4,4);
             M(0,0) = sx; 
             M(1,1) = sy;
@@ -154,7 +179,7 @@ class Matrix {
         }
 
         // retorna um operador de cisalhamento
-        static Matrix shear(double xy, double xz, double yx, double yz, double zx, double zy){
+        static Matrix shearOp(double xy, double xz, double yx, double yz, double zx, double zy){
             Matrix M(4,4);
             M(0,0) = 1, M(0,1) = xy, M(0,2) = xz;
             M(1,0) = yx, M(1,1) = 1, M(1,2) = yz;
@@ -163,7 +188,73 @@ class Matrix {
             return M;
         }
 
+        Matrix translate(double tx, double ty, double tz) {
+            return translation(tx, ty, tz) * (*this);
+        }
+
+        Matrix reflectYZ() {
+            return reflectionYZ() * (*this);
+        }
+
+        Matrix reflectXY() {
+            return reflectionXY() * (*this);
+        }
+
+        Matrix reflectXZ() {
+            return reflectionXZ() * (*this);
+        }
+
+        Matrix rotateX(double angle, bool clockwise = false) {
+            return rotationX(angle, clockwise) * (*this);
+        }
+
+        Matrix rotateY(double angle, bool clockwise = false) {
+            return rotationY(angle, clockwise) * (*this);
+        }
+
+        Matrix rotateZ(double angle, bool clockwise = false) {
+            return rotationZ(angle, clockwise) * (*this);
+        }
+
+        Matrix scale(double sx, double sy, double sz) {
+            return scaleOp(sx, sy, sz) * (*this);
+        }
+
+        Matrix shear(double xy, double xz, double yx, double yz, double zx, double zy) {
+            return shearOp(xy, xz, yx, yz, zx, zy) * (*this);
+        }
+
 };
 
-    
+// multiplicar matriz por escalar 
+inline Matrix operator*(double scalar, const Matrix& M) {
+    Matrix result = M;
+    for (int i = 0; i<M.rows; i++){
+        for(int j = 0; j<M.cols; j++) {
+            result(i,j) *= scalar;
+        }
+    }
+    return result;
+}
+
+inline Matrix operator*(const Matrix& M, double scalar) {
+    Matrix result = M;
+    for (int i = 0; i<M.rows; i++){
+        for(int j = 0; j<M.cols; j++) {
+            result(i,j) *= scalar;
+        }
+    }
+    return result;
+}
+
+inline std::ostream& operator<<(std::ostream& os, Matrix& M){
+    for (int i = 0; i<M.rows; i++){
+        for(int j = 0; j<M.cols; j++) {
+            os << M(i,j) <<" ";
+        }
+        os << std::endl;
+    }
+    return os;
+}
+
 #endif

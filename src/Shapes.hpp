@@ -83,7 +83,6 @@ public:
         double t0 = (B + sqrt(delta)) / 2;
         double t1 = (B - sqrt(delta)) / 2;
 
-        // TODO verificar se era pra usar almost zero
         if (t1 > almostZero)
             return t1;
         if (t0 > almostZero)
@@ -135,7 +134,6 @@ public:
 
 #ifndef TRIANGLEHEADER
 #define TRIANGLEHEADER
-// TODO implementar triangulo com intersect, applyTransform, getNormal
 
 class Triangle : public Shape
 {
