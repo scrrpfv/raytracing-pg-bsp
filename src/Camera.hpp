@@ -7,7 +7,7 @@
 class Camera
 {
 private:
-    double pixelSide;
+    double pixelH, pixelW;
     Vector unitUp;
     Vector unitLeft;
 
@@ -25,9 +25,10 @@ public:
         W = (target - camPosition).normalize();
         U = (Vup.cross(W)).normalize(); // aponta para esquerda
         V = W.cross(U);                 // aponta para cima
-        pixelSide = 1.0 / hres;
-        unitUp = V * pixelSide;
-        unitLeft = U * pixelSide;
+        pixelH = 1.0 / vres;
+        pixelW = 1.0 / hres;
+        unitUp = V * pixelH;
+        unitLeft = U * pixelW;
     }
 
     void render(double f, int ttl)
@@ -36,7 +37,7 @@ public:
         ppm.open("render.ppm");
         std::cout << "Rendering..." << std::endl;
 
-        Point topleftPixel = camPosition + W * (f / 2) + (V * (vres - 1) + U * (hres - 1)) * pixelSide / 2.0;
+        Point topleftPixel = camPosition + W * (f / 2) + (V * (vres - 1) * pixelH + U * (hres - 1) * pixelW) / 2.0;
         ppm << "P3" << std::endl;
         ppm << hres << ' ' << vres << std::endl;
         ppm << 255 << std::endl;

@@ -235,14 +235,22 @@ public:
             std::clog << std::endl;
         }
     }
+
+    void attachMaterials(std::vector<Material> &objects, Vector color)
+    {
+        for (const auto &face : faces)
+        {
+            objects.emplace_back(new Triangle(
+                vertices[face.verticeIndice[0]], 
+                vertices[face.verticeIndice[1]], 
+                vertices[face.verticeIndice[2]],  
+                normals[face.normalIndice[0]]), 
+                color,
+                face.ka, face.kd, face.ks, face.ke, face.d, face.ns, face.ni
+            );
+        } 
+    }
 };
 
-void objReader::attachMaterials(std::vector<Material> &objects)
-{
-    for (const auto &face : faces)
-    {
-        objects.emplace_back(new Triangle(facePoints[face.verticeIndice[0]], facePoints[face.verticeIndice[1]], facePoints[face.verticeIndice[2]]), face.ka, face.kd, face.ks, face.ke, face.ns, face.ni, face.d);
-    }
-}
 
 #endif

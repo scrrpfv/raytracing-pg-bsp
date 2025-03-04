@@ -31,7 +31,7 @@ public:
 
 std::vector<Material> objects;
 
-Vector Material::shade(Point *point, Vector view, Vector *normal) // 112 128 144
+Vector Material::shade(Point *point, Vector view, Vector *normal) 
 {
     Vector resColor = color.elementWiseMultiplication(ambientLight * ka);
 
