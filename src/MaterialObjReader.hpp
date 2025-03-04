@@ -224,12 +224,12 @@ public:
         for (const auto &face : facePoints)
         {
             i++;
-            std::clog << "Face " << i << ": ";
+            std::cout << "Face " << i << ": ";
             for (const auto &Point : face)
             {
                 std::cout << "(" << Point.getX() << ", " << Point.getY() << ", " << Point.getZ() << ")";
             }
-            std::clog << std::endl;
+            std::cout << std::endl;
         }
     }
 
