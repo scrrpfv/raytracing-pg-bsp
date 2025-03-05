@@ -8,8 +8,6 @@
 
 #define PI 3.141592
 
-//TODO verificar se é preciso garantir que cos e sin sejam maiores que almostZero
-
 // Classe de matrizes 4x4 com transformacoes afim
 class Matrix {
     private:
@@ -27,23 +25,22 @@ class Matrix {
             }
         }
 
-        // inicia como uma matriz nula ou identidade nxn
-        Matrix(int rows, int cols, bool identity = true, double initVal = 0.0) : rows(rows), cols(cols) {
+        // inicia como uma matriz nula rowsxcols
+        Matrix(int rows, int cols, double initVal = 0.0) : rows(rows), cols(cols) {
             data.resize(rows, std::vector<double>(cols, initVal));
-            if (identity) {   
-                for (int i = 0; i<rows; i++){
-                    data[i][i] = 1;
-                } 
-            }
         }
 
-        // matriz inciada a partir de um vetor de vetores
+        // incia matriz a partir de um vetor de vetores
         Matrix(const std::vector<std::vector<double>> &data) : data(data){};
     
         double& operator()(int row, int col) {
             return data[row][col];
         }
-
+        
+        double operator()(int row, int col) const {
+            return data[row][col];
+        }
+        
         // aplica matriz no vetor
         Vector operator*(const Vector& v) const {
             double x = data[0][0] * v.x + data[0][1] * v.y + data[0][2] * v.z + data[0][3];
@@ -52,7 +49,7 @@ class Matrix {
             return Vector(x, y, z);
         }
 
-        // aplica matriz no ponto (garantindo coordenadas homogeneas)
+        // aplica matriz no ponto, garantindo coordenadas homogeneas
         Point operator*(const Point& p) const {
             double x = data[0][0] * p.x + data[0][1] * p.y + data[0][2] * p.z + data[0][3];
             double y = data[1][0] * p.x + data[1][1] * p.y + data[1][2] * p.z + data[1][3];
@@ -62,12 +59,12 @@ class Matrix {
             return Point(x, y, z);
         }
 
-        // multiplica duas matrizes (utilizar para composicao de operadores)
-        const Matrix operator*(Matrix& M) {
-            Matrix result = Matrix(rows, M.cols, false);
+        // multiplica duas matrizes 
+        Matrix operator*(Matrix& M) const {
+            Matrix result = Matrix(rows, M.cols);
             for (int i = 0; i < rows; i++){
-                for (int j = 0; j < M.cols; j++){
-                    for (int k = 0; k < cols; k++){
+                for (int k = 0; k < cols; k++){
+                    for (int j = 0; j < M.cols; j++){
                         result(i, j)+=data[i][k]*M(k, j);
                     }
                 }
@@ -76,7 +73,7 @@ class Matrix {
         }
 
         // soma de matrizes
-        const Matrix operator+(Matrix& M) {
+        Matrix operator+(Matrix& M) const {
             Matrix result = Matrix(rows, cols);
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
@@ -227,7 +224,7 @@ class Matrix {
 };
 
 // multiplicar matriz por escalar 
-inline Matrix operator*(double scalar, const Matrix& M) {
+inline Matrix operator*(const double& scalar, const Matrix& M) {
     Matrix result = M;
     for (int i = 0; i<M.rows; i++){
         for(int j = 0; j<M.cols; j++) {
@@ -237,7 +234,7 @@ inline Matrix operator*(double scalar, const Matrix& M) {
     return result;
 }
 
-inline Matrix operator*(const Matrix& M, double scalar) {
+inline Matrix operator*(const Matrix& M, const double& scalar) {
     Matrix result = M;
     for (int i = 0; i<M.rows; i++){
         for(int j = 0; j<M.cols; j++) {

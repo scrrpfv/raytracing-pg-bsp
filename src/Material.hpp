@@ -51,8 +51,8 @@ Vector Material::shade(Point *point, Vector view, Vector *normal)
             double dotdiff = lightDirection.dot(*normal);
             if (dotdiff > almostZero)
             {
-                // resColor = resColor + color.elementWiseMultiplication(light.color).elementWiseMultiplication(kd) * dotdiff * light.intensity;
-                resColor = resColor + light.color.elementWiseMultiplication(kd) * dotdiff * light.intensity;
+                resColor = resColor + color.elementWiseMultiplication(light.color).elementWiseMultiplication(kd) * dotdiff * light.intensity;
+                // resColor = resColor + light.color.elementWiseMultiplication(kd) * dotdiff * light.intensity;
             }
 
             double dotspec = r.dot(view);

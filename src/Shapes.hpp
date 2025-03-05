@@ -7,37 +7,16 @@ const float almostZero = 1e-8f;
 class Shape
 {
 public:
-    // Funções virtuais puras para testar interseção com um raio e obter o vetor normal
-    virtual double rayIntersect(const Ray &ray)
-    {
-        return {}; // Implementação default
-    }
 
-    virtual double rayIntersect(Ray &ray)
-    {
-        return {}; // Implementação default
-    }
+    virtual double rayIntersect(Ray &ray) { return {}; }
 
-    virtual Vector getNormal(Ray &ray, const double t)
-    {
-        return {}; // Implementação default retorna vetor nulo
-    }
+    virtual Vector getNormal(Ray &ray, const double t) { return {}; }
 
-    virtual Vector getNormal(Point &point)
-    {
-        return {}; // Implementação default retorna vetor nulo
-    }
+    virtual Point getPoint() { return {}; }
 
-    virtual Point getPoint()
-    {
-        return {}; // Implementação default retorna vetor nulo
-    }
+    virtual void applyTransform(const Matrix &transformMatrix) { return; }
 
-    // TODO implementar para cada forma
-    virtual void applyTransform(Matrix &transformMatrix)
-    {
-        return;
-    }
+    virtual Matrix getTransform() const { return Matrix(); }
 };
 
 #ifndef SPHEREHEADER
@@ -78,8 +57,6 @@ public:
         if (delta < almostZero)
             return -1;
 
-        // std::cout << "Delta: " << delta << std::endl;
-
         double t0 = (B + sqrt(delta)) / 2;
         double t1 = (B - sqrt(delta)) / 2;
 
@@ -89,6 +66,30 @@ public:
             return t0;
 
         return -1;
+    }
+
+    void applyTransform(const Matrix &transformMatrix) 
+    {
+        center = transformMatrix * center;
+
+        /*
+        Extraindo o fator de escala da matriz de transformação composta:
+        Excluindo a quarta linha e a quarta coluna, as colunas  
+        da matriz resultante representam vetores transformados de uma base do R3.
+        Pegamos a magnitude de cada vetor para saber o fator de escala em cada direcao.
+        */
+        double sx = sqrt(pow(transformMatrix(0,0),2) + pow(transformMatrix(1,0),2) + pow(transformMatrix(2,0),2)); // Magnitude da primeira coluna (vetor i transformado).
+        double sy = sqrt(pow(transformMatrix(0,1),2) + pow(transformMatrix(1,1),2) + pow(transformMatrix(2,1),2)); // Magnitude da segunda coluna (vetor j transformado).
+        double sz = sqrt(pow(transformMatrix(0,2),2) + pow(transformMatrix(1,2),2) + pow(transformMatrix(2,2),2)); // Magnitude da terceira coluna (vetor k transformado).
+
+        /*
+        Aproximacao:
+        Calculamos a media das escalas em cada eixo 
+para que seja isotropica e mantenha a forma de esfera
+        */
+        double scaleFactor = (sx+sy+sz)/3;
+
+        R *= scaleFactor;
     }
 };
 
@@ -127,6 +128,12 @@ public:
         if (t > almostZero)
             return t;
         return -1;
+    }
+
+    void applyTransform(const Matrix &transformMatrix) 
+    {
+        P0 = transformMatrix*P0;
+        normalVec = (transformMatrix * normalVec).normalize();
     }
 };
 
@@ -185,6 +192,14 @@ public:
             return -1;
 
         return t;
+    }
+
+    void applyTransform(const Matrix &transformMatrix) 
+    {
+        p0 = transformMatrix * p0;
+        p1 = transformMatrix * p1;
+        p2 = transformMatrix * p2;
+        normalVec = (transformMatrix * normalVec).normalize();
     }
 };
 
