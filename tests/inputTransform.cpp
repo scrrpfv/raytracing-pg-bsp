@@ -17,9 +17,8 @@ using namespace std;
 int main()
 {
 
-    Matrix t = Matrix()
-    .translate(100, 50, -50)
-    ;
+    Matrix t = Matrix::translation(50, 50, -50);
+    Matrix rz90 = Matrix::rotationZ(90);
 
     Camera *camera = nullptr;
     int vres, hres;
@@ -45,10 +44,11 @@ int main()
             double kd, ks, ka, kr, kt, ior;
             int cSpecular;
             cin >> center >> radius >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
-            // Aplicar transformação na esfera
+
             Sphere* mySphere = new Sphere(center, radius);
-            mySphere->applyTransform(t);
-            objects.emplace_back(new Sphere(center, radius), o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, cSpecular, ior);
+            //mySphere->applyTransform(t);
+            
+            objects.emplace_back(mySphere, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, cSpecular, ior);
         }
         else if (input == 'p')
         {
@@ -59,7 +59,10 @@ int main()
             cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
             // Aplicar transformação no plano
             Plane* myPlane = new Plane(n, p0);
-            myPlane->applyTransform(t);
+
+            Matrix r = Matrix().translate(-p0.x, -p0.y, -p0.z).rotateZ(45).translate(p0.x, p0.y, p0.z);
+            myPlane->applyTransform(r);
+
             objects.emplace_back(myPlane, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, cSpecular, ior);
         }
         else if (input == 'o')
