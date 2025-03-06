@@ -6,7 +6,7 @@
 #ifndef TRANSFORMHPP
 #define TRANSFORMHPP
 
-#define PI 3.141592
+constexpr double PI = 3.1415926536;
 
 // Classe de matrizes 4x4 com transformacoes afim
 class Matrix {
