@@ -7,6 +7,11 @@
 #define TRANSFORMHPP
 
 constexpr double PI = 3.1415926536;
+constexpr double zeroTrig = 1e-6;
+
+inline bool isAlmostZero(double value) {
+    return std::abs(value) <= zeroTrig;
+}
 
 // Classe de matrizes 4x4 com transformacoes afim
 class Matrix {
@@ -126,44 +131,62 @@ class Matrix {
             return M;
         }
 
-        // retorna um operador de rotação em torno do eixo x. Recebe angulo em graus
-        static Matrix rotationX(double angle, bool clockwise = false) {
-            Matrix M(4, 4);
-            angle = angle * PI / 180; 
-            M(0, 0) = 1;
-            M(1, 1) = cos(angle);
-            M(1, 2) = clockwise ? sin(angle) : -sin(angle);
-            M(2, 1) = clockwise ? -sin(angle) : sin(angle);
-            M(2, 2) = cos(angle);
-            M(3, 3) = 1;
-            return M;
-        }
-    
-        // retorna um operador de rotação em torno do eixo y. Recebe angulo em graus
-        static Matrix rotationY(double angle, bool clockwise = false) {
-            Matrix M(4, 4);
-            angle = angle * PI / 180; 
-            M(0, 0) = cos(angle);
-            M(0, 2) = clockwise ? -sin(angle) : sin(angle);
-            M(1, 1) = 1;
-            M(2, 0) = clockwise ? sin(angle) : -sin(angle);
-            M(2, 2) = cos(angle);
-            M(3, 3) = 1;
-            return M;
-        }
-    
-        // retorna um operador de rotação em torno do eixo z. Recebe angulo em graus
-        static Matrix rotationZ(double angle, bool clockwise = false) {
-            Matrix M(4, 4);
-            angle = angle * PI / 180;
-            M(0, 0) = cos(angle);
-            M(0, 1) = clockwise ? sin(angle) : -sin(angle);
-            M(1, 0) = clockwise ? -sin(angle) : sin(angle);
-            M(1, 1) = cos(angle);
-            M(2, 2) = 1;
-            M(3, 3) = 1;
-            return M;
-        }
+       // retorna um operador de rotação em torno do eixo x. Recebe angulo em graus
+       static Matrix rotationX(double angle, bool clockwise = false) {
+        Matrix M(4, 4);
+        angle = angle * PI / 180; 
+        double c = cos(angle);
+        double s = sin(angle);
+
+        c = isAlmostZero(c) ? 0.0 : (isAlmostZero(c - 1) ? 1.0 : (isAlmostZero(c + 1) ? -1.0 : c));
+        s = isAlmostZero(s) ? 0.0 : (isAlmostZero(s - 1) ? 1.0 : (isAlmostZero(s + 1) ? -1.0 : s));
+        
+        M(0, 0) = 1;
+        M(1, 1) = c;
+        M(1, 2) = clockwise ? s : -s;
+        M(2, 1) = clockwise ? -s : s;
+        M(2, 2) = c;
+        M(3, 3) = 1;
+        return M;
+    }
+
+    // retorna um operador de rotação em torno do eixo y. Recebe angulo em graus
+    static Matrix rotationY(double angle, bool clockwise = false) {
+        Matrix M(4, 4);
+        angle = angle * PI / 180; 
+        double c = cos(angle);
+        double s = sin(angle);
+
+        c = isAlmostZero(c) ? 0.0 : (isAlmostZero(c - 1) ? 1.0 : (isAlmostZero(c + 1) ? -1.0 : c));
+        s = isAlmostZero(s) ? 0.0 : (isAlmostZero(s - 1) ? 1.0 : (isAlmostZero(s + 1) ? -1.0 : s));
+        
+        M(0, 0) = c;
+        M(0, 2) = clockwise ? -s : s;
+        M(1, 1) = 1;
+        M(2, 0) = clockwise ? s : -s;
+        M(2, 2) = c;
+        M(3, 3) = 1;
+        return M;
+    }
+
+    // retorna um operador de rotação em torno do eixo z. Recebe angulo em graus
+    static Matrix rotationZ(double angle, bool clockwise = false) {
+        Matrix M(4, 4);
+        angle = angle * PI / 180;
+        double c = cos(angle);
+        double s = sin(angle);
+
+        c = isAlmostZero(c) ? 0.0 : (isAlmostZero(c - 1) ? 1.0 : (isAlmostZero(c + 1) ? -1.0 : c));
+        s = isAlmostZero(s) ? 0.0 : (isAlmostZero(s - 1) ? 1.0 : (isAlmostZero(s + 1) ? -1.0 : s));
+        
+        M(0, 0) = c;
+        M(0, 1) = clockwise ? s : -s;
+        M(1, 0) = clockwise ? -s : s;
+        M(1, 1) = c;
+        M(2, 2) = 1;
+        M(3, 3) = 1;
+        return M;
+    }
 
         // retorna um operador de escala
         static Matrix scaleOp(double sx, double sy, double sz) {

@@ -46,6 +46,21 @@ public:
         return Point(x - vec.getX(), y - vec.getY(), z - vec.getZ());
     }
 
+    Point operator+(Point other)
+    {
+        return Point(x + other.x, y + other.y, z + other.z);
+    }
+
+    Point operator*(double scalar)
+    {
+        return Point(x * scalar, y * scalar, z * scalar);
+    }
+
+    Point operator/(double scalar)
+    {
+        return Point(x / scalar, y / scalar, z / scalar);
+    }
+
     // Print do vetor no formato (x, y, z)
     std::string print()
     {

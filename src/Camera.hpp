@@ -53,9 +53,7 @@ public:
         }
         ppm.close();
     }
-    ~Camera() {
-        // std::cout << "Camera destroyed" << std::endl;
-    };
+    ~Camera() {};
 };
 
 #endif

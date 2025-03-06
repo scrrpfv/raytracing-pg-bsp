@@ -14,6 +14,15 @@ public:
 
     virtual Point getPoint() { return {}; }
 
+    /*
+    Para o funcionamento ideal desse método, aplique uma única operação 
+    a partir de um operador montado previamente por uma sequência de outros operadores.
+
+    Caso seja aplicada diversas transformações, podem ocorrer erros de aproximação
+    devido a normalização de vetores que ocorre após a aplicação da transformação.
+    Quanto mais discrepantes as proporções entre os valores da matriz 
+    e os dos vetores, mais chance de erro após sucessivas transformações
+    */
     virtual void applyTransform(const Matrix &transformMatrix) { return; }
 
     virtual Matrix getTransform() const { return Matrix(); }
@@ -32,6 +41,7 @@ public:
         R = radius;
     }
 
+    // retorna centro da esfera
     Point getPoint()
     {
         return center;
@@ -75,7 +85,7 @@ public:
         /*
         Extraindo o fator de escala da matriz de transformação composta:
         Excluindo a quarta linha e a quarta coluna, as colunas  
-        da matriz resultante representam vetores transformados de uma base do R3.
+        da matriz resultante representam vetores de uma base do R3.
         Pegamos a magnitude de cada vetor para saber o fator de escala em cada direcao.
         */
         double sx = sqrt(pow(transformMatrix(0,0),2) + pow(transformMatrix(1,0),2) + pow(transformMatrix(2,0),2)); // Magnitude da primeira coluna (vetor i transformado).
@@ -85,7 +95,7 @@ public:
         /*
         Aproximacao:
         Calculamos a media das escalas em cada eixo 
-para que seja isotropica e mantenha a forma de esfera
+        para que seja isotropica e mantenha a forma de esfera
         */
         double scaleFactor = (sx+sy+sz)/3;
 
@@ -108,6 +118,12 @@ public:
     {
         normalVec = normal.normalize();
         P0 = planePoint;
+    }
+
+    // retorna ponto usado para formar o plano
+    Point getPoint()
+    {
+        return P0;
     }
 
     Vector getNormal(Ray &ray, const double t)
@@ -149,9 +165,10 @@ public:
     Vector normalVec;
     Triangle(Point p0, Point p1, Point p2, Vector normalVec) : p0(p0), p1(p1), p2(p2), normalVec(normalVec) {}
 
+    // retorna baricentro
     Point getPoint()
     {
-        return p0;
+        return (p0+p1+p2)/3;
     }
 
     Vector getNormal(Ray &ray, const double t)
