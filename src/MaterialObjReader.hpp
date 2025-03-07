@@ -76,7 +76,6 @@ public:
     ObjReader(std::string filename)
     {
 
-        center = getCenter();
         // Abre o arquivo
         file.open(filename);
         if (!file.is_open())
@@ -147,6 +146,8 @@ public:
         }
 
         file.close();
+        
+        center = getCenter();
     }
 
     // Getters
@@ -279,7 +280,7 @@ public:
         for (auto& n: normals){
             n = (transformMatrix*n);
         }
-        
+
         // for(auto& face: faces){
         //     facetoTriang(face).applyTransform(transformMatrix);
         // }
