@@ -71,6 +71,8 @@ int main()
             cin >> filename >> rest;
 
             ObjReader objReader = ObjReader(filename);
+            Matrix transform = Matrix().rotateZ(30).translate(-1,0,-1).scale(0.5, 2, 0.5);
+            objReader.applyTransform(transform);
             objReader.attachMaterials(objects);
         }
         else if (input == 'l')

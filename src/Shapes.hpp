@@ -88,9 +88,9 @@ public:
         da matriz resultante representam vetores de uma base do R3.
         Pegamos a magnitude de cada vetor para saber o fator de escala em cada direcao.
         */
-        double sx = sqrt(pow(transformMatrix(0,0),2) + pow(transformMatrix(1,0),2) + pow(transformMatrix(2,0),2)); // Magnitude da primeira coluna (vetor i transformado).
-        double sy = sqrt(pow(transformMatrix(0,1),2) + pow(transformMatrix(1,1),2) + pow(transformMatrix(2,1),2)); // Magnitude da segunda coluna (vetor j transformado).
-        double sz = sqrt(pow(transformMatrix(0,2),2) + pow(transformMatrix(1,2),2) + pow(transformMatrix(2,2),2)); // Magnitude da terceira coluna (vetor k transformado).
+        double sx = sqrt(pow(transformMatrix(0,0),2) + pow(transformMatrix(1,0),2) + pow(transformMatrix(2,0),2)); // vetor i transformado
+        double sy = sqrt(pow(transformMatrix(0,1),2) + pow(transformMatrix(1,1),2) + pow(transformMatrix(2,1),2)); // vetor j transformado
+        double sz = sqrt(pow(transformMatrix(0,2),2) + pow(transformMatrix(1,2),2) + pow(transformMatrix(2,2),2)); // vetor k transformado
 
         /*
         Aproximacao:
@@ -163,7 +163,8 @@ class Triangle : public Shape
 public:
     Point p0, p1, p2;
     Vector normalVec;
-    Triangle(Point p0, Point p1, Point p2, Vector normalVec) : p0(p0), p1(p1), p2(p2), normalVec(normalVec) {}
+    Triangle(Point p0, Point p1, Point p2, Vector normalVec) : p0(p0), p1(p1), p2(p2), normalVec(normalVec.normalize()) 
+    {}
 
     // retorna baricentro
     Point getPoint()
@@ -173,12 +174,16 @@ public:
 
     Vector getNormal(Ray &ray, const double t)
     {
-        return normalVec;
+        normalVec = (p1-p0).cross(p2-p0).normalize();
+        Vector align = ray.from - getPoint();
+        if (normalVec.dot(align) > almostZero)
+            return normalVec;
+        return normalVec * -1;
     }
 
     double rayIntersect(Ray &ray)
     {
-
+        getNormal(ray, 0);
         Plane triangPlane = Plane(normalVec, p0);
         double t = triangPlane.rayIntersect(ray);
 

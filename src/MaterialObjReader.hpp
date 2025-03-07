@@ -220,6 +220,11 @@ public:
         return vertices;
     }
 
+    std::vector<Vector> getNormals()
+    {
+        return normals;
+    }
+
     // Emite um output no terminal para cada face, com seus respectivos pontos (x, y, z)
     void print_faces()
     {
@@ -277,13 +282,6 @@ public:
         for (auto& v: vertices){
             v = transformMatrix*v;
         }
-        for (auto& n: normals){
-            n = (transformMatrix*n);
-        }
-
-        // for(auto& face: faces){
-        //     facetoTriang(face).applyTransform(transformMatrix);
-        // }
 
         center = getCenter();
     }
