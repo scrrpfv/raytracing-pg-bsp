@@ -51,11 +51,6 @@ public:
         return Point(x + other.x, y + other.y, z + other.z);
     }
 
-    Point operator*(double scalar)
-    {
-        return Point(x * scalar, y * scalar, z * scalar);
-    }
-
     Point operator/(double scalar)
     {
         return Point(x / scalar, y / scalar, z / scalar);
@@ -83,6 +78,16 @@ inline std::ostream &operator<<(std::ostream &os, const Point &t)
 {
     os << "(" << t.x << "," << t.y << "," << t.z << ")";
     return os;
+}
+
+inline Point operator*(Point p, double scalar)
+{
+    return Point(p.x * scalar, p.y * scalar, p.z * scalar);
+}
+
+inline Point operator*(double scalar, Point p)
+{
+    return Point(p.x * scalar, p.y * scalar, p.z * scalar);
 }
 
 #endif

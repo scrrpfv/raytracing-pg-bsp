@@ -65,6 +65,19 @@ class Matrix {
         }
 
         // multiplica duas matrizes 
+        Matrix operator*(const Matrix& M) const {
+            Matrix result = Matrix(rows, M.cols);
+            for (int i = 0; i < rows; i++){
+                for (int k = 0; k < cols; k++){
+                    for (int j = 0; j < M.cols; j++){
+                        result(i, j)+=data[i][k]*M(k, j);
+                    }
+                }
+            }  
+            return result;
+        }
+
+        // multiplica duas matrizes 
         Matrix operator*(Matrix& M) const {
             Matrix result = Matrix(rows, M.cols);
             for (int i = 0; i < rows; i++){
@@ -78,7 +91,7 @@ class Matrix {
         }
 
         // soma de matrizes
-        Matrix operator+(Matrix& M) const {
+        Matrix operator+(const Matrix& M) const {
             Matrix result = Matrix(rows, cols);
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
@@ -98,6 +111,18 @@ class Matrix {
             M(0, 3) = tx;
             M(1, 3) = ty;
             M(2, 3) = tz;
+            return M;
+        }
+
+        static Matrix translation(Point p) {
+            Matrix M(4, 4);
+            M(0, 0) = 1; 
+            M(1, 1) = 1; 
+            M(2, 2) = 1;
+            M(3, 3) = 1;
+            M(0, 3) = p.x;
+            M(1, 3) = p.y;
+            M(2, 3) = p.z;
             return M;
         }
         
@@ -210,6 +235,10 @@ class Matrix {
 
         Matrix translate(double tx, double ty, double tz) {
             return translation(tx, ty, tz) * (*this);
+        }
+
+        Matrix translate(Point p){
+            return translation(p) * (*this);
         }
 
         Matrix reflectYZ() {

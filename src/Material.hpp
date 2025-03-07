@@ -7,10 +7,10 @@ public:
     Shape *shape;
     Vector color;
     Vector ka, kd, ks, kr;
-    int cSpecular;
+    int roughness;
     double kt, ior;
 
-    Material(Shape *shape, Vector color, Vector ka, Vector kd, Vector ks, Vector kr, double kt, int cSpecular, double ior) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), cSpecular(cSpecular), ior(ior)
+    Material(Shape *shape, Vector color, Vector ka, Vector kd, Vector ks, Vector kr, double kt, int roughness, double ior) : shape(shape), color(color / 255.0), ka(ka), kd(kd), ks(ks), kr(kr), kt(kt), roughness(roughness), ior(ior)
     {
     }
 
@@ -58,7 +58,7 @@ Vector Material::shade(Point *point, Vector view, Vector *normal)
             double dotspec = r.dot(view);
             if (dotspec > almostZero)
             {
-                resColor = resColor + light.color.elementWiseMultiplication(ks) * pow(dotspec, cSpecular) * light.intensity;
+                resColor = resColor + light.color.elementWiseMultiplication(ks) * pow(dotspec, roughness) * light.intensity;
             }
         }
     }

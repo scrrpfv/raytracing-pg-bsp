@@ -42,28 +42,28 @@ int main()
             Point center;
             double radius;
             double kd, ks, ka, kr, kt, ior;
-            int cSpecular;
-            cin >> center >> radius >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
+            int roughness;
+            cin >> center >> radius >> o >> kd >> ks >> ka >> kr >> kt >> roughness >> ior;
 
             Sphere* mySphere = new Sphere(center, radius);
             //mySphere->applyTransform(t);
             
-            objects.emplace_back(mySphere, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, cSpecular, ior);
+            objects.emplace_back(mySphere, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, roughness, ior);
         }
         else if (input == 'p')
         {
             Vector n, o;
             Point p0;
             double kd, ks, ka, kr, kt, ior;
-            int cSpecular;
-            cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> cSpecular >> ior;
+            int roughness;
+            cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> roughness >> ior;
             // Aplicar transformação no plano
             Plane* myPlane = new Plane(n, p0);
 
-            Matrix r = Matrix().translate(-p0.x, -p0.y, -p0.z).rotateZ(45).translate(p0.x, p0.y, p0.z);
+            Matrix r = Matrix().translate(-1*p0).rotateZ(45).translate(p0);
             myPlane->applyTransform(r);
 
-            objects.emplace_back(myPlane, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, cSpecular, ior);
+            objects.emplace_back(myPlane, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, roughness, ior);
         }
         else if (input == 'o')
         {
