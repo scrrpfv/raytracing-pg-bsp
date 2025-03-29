@@ -174,7 +174,6 @@ public:
 
     Vector getNormal(Ray &ray, const double t)
     {
-        normalVec = (p1-p0).cross(p2-p0).normalize();
         Vector align = ray.from - getPoint();
         if (normalVec.dot(align) > almostZero)
             return normalVec;
@@ -183,7 +182,6 @@ public:
 
     double rayIntersect(Ray &ray)
     {
-        getNormal(ray, 0);
         Plane triangPlane = Plane(normalVec, p0);
         double t = triangPlane.rayIntersect(ray);
 
