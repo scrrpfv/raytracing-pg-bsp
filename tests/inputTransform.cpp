@@ -45,9 +45,9 @@ int main()
             int roughness;
             cin >> center >> radius >> o >> kd >> ks >> ka >> kr >> kt >> roughness >> ior;
 
-            Sphere* mySphere = new Sphere(center, radius);
-            //mySphere->applyTransform(t);
-            
+            Sphere *mySphere = new Sphere(center, radius);
+            // mySphere->applyTransform(t);
+
             objects.emplace_back(mySphere, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, roughness, ior);
         }
         else if (input == 'p')
@@ -58,9 +58,9 @@ int main()
             int roughness;
             cin >> p0 >> n >> o >> kd >> ks >> ka >> kr >> kt >> roughness >> ior;
             // Aplicar transformação no plano
-            Plane* myPlane = new Plane(n, p0);
+            Plane *myPlane = new Plane(n, p0);
 
-            Matrix r = Matrix().translate(-1*p0).rotateZ(45).translate(p0);
+            Matrix r = Matrix().translate(-1 * p0).rotateZ(45).translate(p0);
             myPlane->applyTransform(r);
 
             objects.emplace_back(myPlane, o, Vector(ka, ka, ka), Vector(kd, kd, kd), Vector(ks, ks, ks), Vector(kr, kr, kr), kt, roughness, ior);
@@ -71,7 +71,7 @@ int main()
             cin >> filename >> rest;
 
             ObjReader objReader = ObjReader(filename);
-            Matrix transform = Matrix().rotateZ(30).translate(-1,0,-1).scale(0.5, 2, 0.5);
+            Matrix transform = Matrix().scale(0.5, 0.5, 0.5).rotateZ(90);
             objReader.applyTransform(transform);
             objReader.attachMaterials(objects);
         }

@@ -62,6 +62,11 @@ public:
         return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
     }
 
+    double distance(Point other) const
+    {
+        return sqrt(pow(x - other.x, 2) + pow(y - other.y, 2) + pow(z - other.z, 2));
+    }
+
     // Getters
     double getX() const { return x; }
     double getY() const { return y; }

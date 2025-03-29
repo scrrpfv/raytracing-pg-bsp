@@ -146,7 +146,7 @@ public:
         }
 
         file.close();
-        
+
         center = getCenter();
     }
 
@@ -251,41 +251,44 @@ public:
                                      vertices[face.verticeIndice[2]],
                                      normals[face.normalIndice[0]]),
                                  face.kd * 255,
-                                 face.ka, face.kd, face.ks, face.ke, face.d, face.ns, face.ni);
+                                 face.ka, face.kd, face.ks, face.ke, 1 - face.d, face.ns, face.ni);
         }
     }
 
-    Triangle facetoTriang(Face& face){
+    Triangle facetoTriang(Face &face)
+    {
         return Triangle(
             vertices[face.verticeIndice[0]],
             vertices[face.verticeIndice[1]],
             vertices[face.verticeIndice[2]],
-            normals[face.normalIndice[0]]
-        );
+            normals[face.normalIndice[0]]);
     }
 
-    Point getCenter(){
-        Point p(0,0,0);
-        for(auto& v: vertices){
+    Point getCenter()
+    {
+        Point p(0, 0, 0);
+        for (auto &v : vertices)
+        {
             p = p + v;
         }
-        return p/vertices.size();
+        return p / vertices.size();
     }
 
-    void applyTransform(Matrix& transformMatrix){
-        
-        Matrix translateOrigin = Matrix::translation(-1*center);
+    void applyTransform(Matrix &transformMatrix)
+    {
+
+        Matrix translateOrigin = Matrix::translation(-1 * center);
         Matrix translateBack = Matrix::translation(center);
 
-        transformMatrix = translateBack*transformMatrix*translateOrigin;
-        
-        for (auto& v: vertices){
-            v = transformMatrix*v;
+        transformMatrix = translateBack * transformMatrix * translateOrigin;
+
+        for (auto &v : vertices)
+        {
+            v = transformMatrix * v;
         }
 
         center = getCenter();
     }
-
 };
 
 #endif

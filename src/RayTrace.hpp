@@ -28,29 +28,33 @@ RayCastResult rayCast(Ray ray)
 
 Vector rayTrace(Ray ray, int ttl)
 {
+    Vector color;
     RayCastResult cast = rayCast(ray);
-    if (cast.hit && ttl != 0)
+    if (cast.hit && (cast.reflectedRay.from.distance(ray.from) > almostZero))
     {
-        if (cast.hit->kr.getX() > almostZero && cast.hit->kr.getY() > almostZero && cast.hit->kr.getZ() > almostZero)
-        {
-            Vector reflectedColor = rayTrace(cast.reflectedRay, ttl - 1);
-            return cast.color + reflectedColor.elementWiseMultiplication(cast.hit->kr);
-        }
-        if (cast.hit->kt > almostZero)
+        color = cast.color;
+
+        if (ttl > 0)
         {
             try
             {
-                Ray refractedRay = ray.refract(cast.hit->getShape()->getNormal(ray, 0), cast.hit->ior);
-                Vector refractedColor = rayTrace(refractedRay, ttl - 1);
-                // Vector refractedColor = rayTrace(Ray(cast.reflectedRay.from, cast.reflectedRay.from + ray.direction), ttl - 1);
-                return cast.color + refractedColor * cast.hit->kt;
+                if (cast.hit->kt > almostZero)
+                {
+                    Ray refractedRay = ray.refract(cast.hit->getShape()->getNormal(ray, 0), cast.hit->ior);
+                    color = color + rayTrace(refractedRay, ttl - 1) * cast.hit->kt;
+                }
+                if (cast.hit->kr.getX() > almostZero || cast.hit->kr.getY() > almostZero || cast.hit->kr.getZ() > almostZero)
+                {
+                    Vector reflectedColor = rayTrace(cast.reflectedRay, ttl - 1);
+                    color = color + reflectedColor.elementWiseMultiplication(cast.hit->kr);
+                }
             }
             catch (int e)
             {
-                return cast.color;
+                color = color + rayTrace(cast.reflectedRay, ttl - 1);
             }
         }
+        return color;
     }
-
     return cast.color;
 }
