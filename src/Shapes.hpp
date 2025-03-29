@@ -51,9 +51,9 @@ public:
     {
         Point P = ray.getPoint(t);
         Vector normalVec = (P - center).normalize();
-        if ((ray.from - center).norm() < R)
-            return normalVec;
-        return normalVec * -1;
+        //if ((ray.from - center).norm() < R)
+        return normalVec;
+        //return normalVec * -1;
     }
 
     double rayIntersect(Ray &ray)
