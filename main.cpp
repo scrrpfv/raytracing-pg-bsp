@@ -71,6 +71,30 @@ int main()
 
             lights.push_back(light);
         }
+        else if (input == 't') {
+            Point p1, p2, p3;
+            Vector color;
+            double intensity;
+            int t;
+            
+            cin >> p1 >> p2 >> p3>> intensity >> color >> t;
+            if (t < 1) {
+                Point pos = (p2 + p3) / 2;
+                Light light = Light(p1, color, intensity / 255.0);
+                lights.push_back(light);
+            } else {
+                Vector u = (p2 - p1)/t;
+                Vector v = (p3 - p1)/t;
+                intensity = intensity / ((t + 1) * (t + 1));
+                for (int i = 0; i <= t; i++) {
+                    for (int j = 0; j <= t; j++) {
+                        Point pos = p1 + u * i + v * j;
+                        Light light = Light(pos, color, intensity / 255.0);
+                        lights.push_back(light);
+                    }
+                }
+            }
+        }
         else if (input == 'a')
         {
             cin >> ambientLight;
